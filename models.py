@@ -1,78 +1,45 @@
 import sqlite3
 
+
 def init_db():
-    conn = sqlite3.connect("app.db")
-    cursor = conn.cursor()
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS users (
+    conn = sqlite3.connect('sarcastic_network.db')
+    c = conn.cursor()
+
+    c.execute('''
+    CREATE TABLE  IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
+        username TEXT NOT NULL,
         email TEXT NOT NULL,
         password TEXT NOT NULL,
-        image TEXT NOT NULL
+        registered_on DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE (username),
+        UNIQUE (email)
     );
-    """)
-    cursor.execute("""
+    ''')
+
+    c.execute('''
     CREATE TABLE IF NOT EXISTS posts (
+        id INTEGER PRIMARY KEY,
+        user_id INTEGER,
+        picture BLOB,
+        content TEXT,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+    ''')
+
+    c.execute('''
+    CREATE TABLE IF NOT EXISTS comments (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
+        post_id INTEGER NOT NULL,
         user_id INTEGER NOT NULL,
-        title TEXT NOT NULL,
         content TEXT NOT NULL,
-        FOREIGN KEY (user_id) REFERENCES users (id)
-    );
-    """)
-    conn.commit()
-    conn.close()
+        timestamp TEXT NOT NULL,
+        upvotes INTEGER DEFAULT 0,
+        downvotes INTEGER DEFAULT 0,
+        FOREIGN KEY (post_id) REFERENCES posts(id),
+        FOREIGN KEY (user_id) REFERENCES users(id)
+    )
+    ''')
 
-def register_user(name, email, password, image):
-    conn = sqlite3.connect("app.db")
-    cursor = conn.cursor()
-    cursor.execute("""
-    INSERT INTO users (name, email, password, image)
-    VALUES (?, ?, ?, ?);
-    """, (name, email, password, image))
-    conn.commit()
-    conn.close()
-
-def get_user(email, password):
-    conn = sqlite3.connect("app.db")
-    cursor = conn.cursor()
-    cursor.execute("""
-    SELECT * FROM users
-    WHERE email = ? AND password = ?;
-    """, (email, password))
-    a=cursor.fetchone()
-    conn.close()
-    return a
-
-def get_user_by_id(user_id):
-    conn = sqlite3.connect("app.db")
-    cursor = conn.cursor()
-    cursor.execute("""
-    SELECT * FROM users
-    WHERE id = ?;
-    """, (user_id,))
-    a=cursor.fetchone()
-    conn.close()
-    return a
-
-def get_posts_by_user_id(user_id):
-    conn = sqlite3.connect("app.db")
-    cursor = conn.cursor()
-    cursor.execute("""
-    SELECT * FROM posts
-    WHERE user_id = ?;
-    """, (user_id,))
-    a=cursor.fetchall()
-    conn.close()
-    return a
-
-def add_post(user_id, title, content):
-    conn = sqlite3.connect("app.db")
-    cursor = conn.cursor()
-    cursor.execute("""
-    INSERT INTO posts (user_id, title, content)
-    VALUES (?, ?, ?);
-    """, (user_id, title, content))
     conn.commit()
     conn.close()

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@1.*/css/pico.min.css"">
+    <link rel="shortcut icon" href="https://picocss.com/favicon.ico">
+    <link rel="canonical" href="https://picocss.com/examples/company/">
+    <title>Sarcastic! •</title>
+    <link rel="stylesheet" href="css/custom.css">
+</head>
+<body>
+
+<!-- Hero -->
+    <div class="hero" data-theme="dark">
+      <nav class="container-fluid">
+        <ul>
+          <li><a href="{{ url_for('index') }}" class="contrast" ><strong>Sarcastic!</strong></a></li>
+        </ul>
+        <ul>
+            {% if session.username %}
+          <li>
+            <details role="list" dir="rtl">
+              <summary aria-haspopup="listbox" role="link" class="contrast" href="{{ url_for('profile', username=session.username) }}">Welcome, {{ session.username }}</summary>
+              <ul role="listbox">
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                {% else %}
+
+                <li><a href="{{ url_for('login') }}">Login</a></li>
+                <li><a href="{{ url_for('register') }}">Register</a></li>
+                {% endif %}
+              </ul>
+            </details>
+          </li>
+          <li>
+            <details role="list" dir="rtl">
+              <summary aria-haspopup="listbox" role="link" class="contrast">Menu</summary>
+              <ul role="listbox">
+                <li><a href="{{ url_for('feed') }}">Feed</a></li>
+                <li><a href="{{ url_for('search') }}">Search</a></li>
+              </ul>
+            </details>
+          </li>
+        </ul>
+      </nav>
+    </div><!-- ./ Hero -->
+
+<!-- Main -->
+ <main class="container" id="main">
+      <article id="article">
+        <h2>About US</h2>
+        <p>Introducing the latest addition to the ever-growing world of social media: the Sarcastic Social Network!</p>
+          <p>Finally, a platform that caters to the cynical, the snarky, and the sarcastic among us.</p>
+          <p>Say goodbye to the bland and inauthentic nature of other social networks.
+          With the Sarcastic Social Network, you can express your true feelings without fear of judgment or repercussions.</p>
+          <p> Don't like a post? Use the eye roll or sarcastic clap emoji to show your disapproval. Disagree with someone's opinion? Use the "wow, you must be so right" button to convey your thoughts.</p>
+          <p> Don't worry about trolls or fake news on our platform - everything on the Sarcastic Social Network is clearly marked as sarcasm, so you don't have to waste any brainpower thinking critically or fact-checking. We all know that's too much effort for a social network user.</p>
+          <footer><small>So, what are you waiting for? Join the Sarcastic Social Network today and let your snarky flag fly high. Because who needs positivity and optimism when you can have sarcasm and irony?</p>
+</small></footer>
+      </article> </main><!-- ./ Main -->
+
+  <div class="container">
+        {% for message in get_flashed_messages() %}
+        <div class="alert alert-danger">{{ message }}</div>
+        {% endfor %}
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</body>
+</html>
