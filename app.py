@@ -12,7 +12,7 @@ from forms import LoginForm
 app = Flask(__name__)
 app.secret_key = 'secret_key'  # a secret key is required for sessions
 CSRFProtect(app)
-app.config['UPLOAD_FOLDER'] = '/Users/andre.montoia/PycharmProjects/proj/templates/assets'
+app.config['UPLOAD_FOLDER'] = '../proj/templates/assets'
 
 conn = sqlite3.connect('sarcastic_network.db', check_same_thread=False)
 c = conn.cursor()
