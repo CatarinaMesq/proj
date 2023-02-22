@@ -8,7 +8,6 @@
     <link rel="shortcut icon" href="https://picocss.com/favicon.ico">
     <link rel="canonical" href="https://picocss.com/examples/company/">
     <title>Sarcastic! •</title>
-    <link rel="stylesheet" href="css/custom.css">
 </head>
 <body>
 
@@ -25,6 +24,7 @@
               <summary aria-haspopup="listbox" role="link" class="contrast" href="{{ url_for('profile', username=session.username) }}">Welcome, {{ session.username }}</summary>
               <ul role="listbox">
                 <li><a href="{{ url_for('logout') }}">Logout</a></li>
+
                 {% else %}
 
                 <li><a href="{{ url_for('login') }}">Login</a></li>

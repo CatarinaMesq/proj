@@ -1,15 +1,18 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+import base64
+import os
+import sqlite3
+
+from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask_wtf.csrf import CSRFProtect
 from werkzeug.security import generate_password_hash, check_password_hash
 
 import models
-import sqlite3
-# import base64
-from flask_wtf.csrf import CSRFProtect
 from forms import LoginForm
 
 app = Flask(__name__)
 app.secret_key = 'secret_key'  # a secret key is required for sessions
 CSRFProtect(app)
+app.config['UPLOAD_FOLDER'] = '/Users/andre.montoia/PycharmProjects/proj/templates/assets'
 
 conn = sqlite3.connect('sarcastic_network.db', check_same_thread=False)
 c = conn.cursor()
@@ -123,12 +126,26 @@ def feed():
     """)
     comments = c.fetchall()
     form = LoginForm()
-    # for post in posts:
-    # with open(post.picture, "rb") as image_file:
-    #    encoded_string = base64.b64encode(image_file.read()).decode("utf-8")
-    # post.picture = encoded_string
-    return render_template('feed.html', posts=posts, form=form, comments=comments)
+    post_list = []
+    for post in posts:
+        if isinstance(post[2], bytes):
+            encoded_string = base64.b64encode(post[2]).decode("utf-8")
+        else:
+            encoded_string = base64.b64encode(post[2].encode()).decode("utf-8")
+        post_dict = {
+            'id': post[0],
+            'user_id': post[1],
+            'picture': f"data:image/png;base64,{encoded_string}",
+            'content': post[3],
+            'created_at': post[4]
+        }
+        post_list.append(post_dict)
+    return render_template('feed.html', posts=post_list, form=form, comments=comments)
+
     # print(posts)
+
+
+from werkzeug.utils import secure_filename
 
 
 @app.route('/post', methods=['GET', 'POST'])
@@ -145,14 +162,20 @@ def post():
         ORDER BY comments.timestamp DESC
     """)
     comments = c.fetchall()
+
     if request.method == 'POST':
         # Get the uploaded image
-        # image = request.files['image']
+        image = request.files['image']
 
-        # Read the image into memory
-        # image_bytes = image.read()
-        # img_b = sqlite3.Binary(image_bytes)
-        img_b = ''
+        # Check if the file is an image
+        if not image.filename.endswith(('.jpg', '.jpeg', '.png', '.gif')):
+            flash('Invalid file type. Please upload a JPG, JPEG, PNG, or GIF file.', 'error')
+            return redirect(request.url)
+
+        # Save the image to a temporary file
+        filename = secure_filename(image.filename)
+        image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        image.save(image_path)
 
         # Get the post content
         content = request.form['content']
@@ -161,21 +184,37 @@ def post():
         user_id = session['username']
 
         # Insert the post into the database
-        # c = get_db().cursor()
-        c.execute('INSERT INTO posts (user_id, picture, content) VALUES (?, ?, ?)', (user_id, img_b, content))
+        with open(image_path, 'rb') as f:
+            img_data = f.read()
+        c.execute('INSERT INTO posts (user_id, picture, content) VALUES (?, ?, ?)', (user_id, img_data, content))
         conn.commit()
-        # get_db().commit()
+
+        os.remove(image_path)
 
         c.execute("""
         SELECT * FROM posts
         ORDER BY posts.created_at DESC
         """)
         posts = c.fetchall()
-        print(posts)
 
-        return render_template('feed.html', posts=posts, form=form, comments=comments)
+        post_list = []
+        for post in posts:
+            if isinstance(post[2], bytes):
+                encoded_string = base64.b64encode(post[2]).decode("utf-8")
+            else:
+                encoded_string = base64.b64encode(post[2].encode()).decode("utf-8")
+            post_dict = {
+                'id': post[0],
+                'user_id': post[1],
+                'picture': f"data:image/png;base64,{encoded_string}",
+                'content': post[3],
+                'created_at': post[4]
+            }
+            post_list.append(post_dict)
 
-    return render_template('feed.html', form=form, posts=posts, comments=comments)
+        return redirect(url_for('feed'))
+
+    return redirect(url_for('feed'))
 
 
 @app.route('/comment', methods=['POST'])
@@ -202,7 +241,7 @@ def comment():
     """)
     comments = c.fetchall()
 
-    return render_template('feed.html', form=form, posts=posts, comments=comments)
+    return redirect(url_for('feed'))
 
 
 @app.route('/upvote_comment', methods=['POST'])
@@ -239,7 +278,7 @@ def downvote_comment():
         WHERE id = ?
     """, (comment_id,))
     conn.commit()
-    return 'Comment upvoted'
+    return 'Comment upvote'
 
 
 @app.errorhandler(404)
@@ -280,4 +319,4 @@ def search():
 
 if __name__ == '__main__':
     models.init_db()
-    app.run(debug=True)
+    app.run(debug=True, port=8083)
