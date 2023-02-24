@@ -2,9 +2,10 @@ import base64
 import os
 import sqlite3
 
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, abort
 from flask_wtf.csrf import CSRFProtect
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 
 import models
 from forms import LoginForm
@@ -113,6 +114,7 @@ def profile(username):
     return render_template('user_profile.html', user=user, posts=posts, comments=comments, form=form)
 
 
+# the main page
 @app.route('/feed')
 def feed():
     c.execute("""
@@ -132,12 +134,30 @@ def feed():
             encoded_string = base64.b64encode(post[2]).decode("utf-8")
         else:
             encoded_string = base64.b64encode(post[2].encode()).decode("utf-8")
+        c.execute("""
+            SELECT * FROM comments
+            WHERE post_id = ?
+            ORDER BY comments.timestamp DESC
+        """, (post[0],))
+        post_comments = c.fetchall()
+        comment_list = []
+        for comment in post_comments:
+            comment_dict = {
+                'id': comment[0],
+                'user_id': comment[1],
+                'post_id': comment[2],
+                'content': comment[3],
+                'timestamp': comment[4],
+                'upvotes': comment[5]
+            }
+            comment_list.append(comment_dict)
         post_dict = {
             'id': post[0],
             'user_id': post[1],
             'picture': f"data:image/png;base64,{encoded_string}",
             'content': post[3],
-            'created_at': post[4]
+            'created_at': post[4],
+            'comments': comment_list
         }
         post_list.append(post_dict)
     return render_template('feed.html', posts=post_list, form=form, comments=comments)
@@ -145,12 +165,17 @@ def feed():
     # print(posts)
 
 
-from werkzeug.utils import secure_filename
 
 
+
+# inserts a post on the feed page
 @app.route('/post', methods=['GET', 'POST'])
 def post():
     form = LoginForm()
+    if 'username' not in session:
+        flash('You must be logged in to post!', 'error')
+        return redirect(url_for('login'))
+
     c.execute("""
         SELECT * FROM posts
         ORDER BY posts.created_at DESC
@@ -165,7 +190,12 @@ def post():
 
     if request.method == 'POST':
         # Get the uploaded image
-        image = request.files['image']
+        image = request.files.get('image')
+
+        # Check if the user uploaded an image
+        if not image:
+            flash('You must upload an image!', 'error')
+            return redirect(request.url)
 
         # Check if the file is an image
         if not image.filename.endswith(('.jpg', '.jpeg', '.png', '.gif')):
@@ -266,7 +296,7 @@ def upvote_comment():
     """)
     comments = c.fetchall()
 
-    return render_template('feed.html', posts=posts, form=form, comments=comments)
+    return redirect(url_for('feed'))
 
 
 @app.route('/downvote_comment', methods=['POST'])
@@ -278,43 +308,45 @@ def downvote_comment():
         WHERE id = ?
     """, (comment_id,))
     conn.commit()
-    return 'Comment upvote'
+    return redirect(url_for('feed'))
 
 
-@app.errorhandler(404)
-def error_occurred(error):
-    return render_template('error.html'), 404
+from flask import abort
 
 
-@app.route('/search', methods=['GET', 'POST'])
+@app.route('/error')
+def error():
+    abort(404)
+
+
+@app.route('/search')
 def search():
-    form = LoginForm()
-    if request.method == 'POST':
-        # Connect to the database
-        # conn = sqlite3.connect('mydatabase.db')
-        # c = conn.cursor()
+    query = request.args.get('q')  # Get the user's search query from the URL query string
+    if not query:
+        return redirect(url_for('error'))
 
-        # Retrieve the search query from the form
-        search_query = request.form['query']
+    # Use the LIKE operator with wildcards to search for posts that contain the query string
+    sql = "SELECT * FROM posts WHERE content LIKE ?"
+    params = ('%' + query + '%',)
+    c.execute(sql, params)
+    posts = c.fetchall()
 
-        # Query the database for posts that match the search query
-        c.execute("SELECT * FROM posts WHERE content LIKE ?", ('%' + search_query + '%',))
-        results = c.fetchall()
+    post_list=[]
+    for post in posts:
+        if isinstance(post[2], bytes):
+            encoded_string = base64.b64encode(post[2]).decode("utf-8")
+        else:
+            encoded_string = base64.b64encode(post[2].encode()).decode("utf-8")
 
-        c.execute("""
-        SELECT * FROM comments
-        ORDER BY comments.timestamp DESC
-        """)
-        comments = c.fetchall()
-
-        # Close the connection to the database
-        # conn.close()
-
-        # Render the search results page
-        return render_template('search.html', posts=results, search_query=search_query,
-                               form=form, comments=comments)
-    else:
-        return render_template('search.html', form=form)
+        post_dict = {
+            'id': post[0],
+            'user_id': post[1],
+            'picture': f"data:image/png;base64,{encoded_string}",
+            'content': post[3],
+            'created_at': post[4],
+        }
+        post_list.append(post_dict)
+    return render_template('search.html', query=query, posts=post_list)
 
 
 if __name__ == '__main__':

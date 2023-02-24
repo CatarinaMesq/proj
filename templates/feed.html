@@ -1,96 +1,64 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@1.*/css/pico.min.css">
-    <link rel="canonical" href="https://picocss.com/examples/company/">
-    <title>Sarcastic! •</title>
-    <link rel="stylesheet" href="custom.css">
-</head>
-<body>
-
-<!-- Hero -->
-    <div class="hero" data-theme="dark">
-      <nav class="container-fluid">
-        <ul>
-          <li><a href="{{ url_for('index') }}" class="contrast" ><strong>Sarcastic!</strong></a></li>
-        </ul>
-        <ul>
-            {% if session.username %}
-          <li>
-            <details role="list" dir="rtl">
-              <summary aria-haspopup="listbox" role="link" class="contrast" href="{{ url_for('profile', username=session.username) }}">Welcome, {{ session.username }}</summary>
-              <ul role="listbox">
-                <li><a href="{{ url_for('logout') }}">Logout</a></li>
-                {% else %}
-                <li><a href="{{ url_for('login') }}">Login</a></li>
-                <li><a href="{{ url_for('register') }}">Register</a></li>
-                {% endif %}
-              </ul>
-            </details>
-          </li>
-          <li>
-            <details role="list" dir="rtl">
-              <summary aria-haspopup="listbox" role="link" class="contrast">Menu</summary>
-              <ul role="listbox">
-                <li><a href="{{ url_for('feed') }}">Feed</a></li>
-                <li><a href="{{ url_for('search') }}">Search</a></li>
-              </ul>
-            </details>
-          </li>
-        </ul>
-      </nav>
-    </div><!-- ./ Hero -->
+{% extends 'base.html' %}
 
 {% block content %}
+  <style>
+    .post img {
+  display: block;
+  margin: 0 auto;
+}
+  .comments-container {
+  border: 1px solid rgba(128, 128, 128, 0.5);
+  padding: 10px;
+  margin-top: 10px;}
+   </style>
 
 
-</body>
+
 <div class="container mt-5">
   <h2 class="text-center">Feed</h2>
   <p class="text-center">View and post updates on the Sarcastic Network</p>
-
   <!-- Post Form -->
   <main class="container" id="main">
   <form method="POST" action="{{ url_for('post') }}" enctype="multipart/form-data">
     {{ form.csrf_token }}
-    <input type="file" name="image">
-    <textarea name="content" placeholder="What's on your mind?"></textarea>
-    <button type="submit">Post</button>
+    <input type="file" name="image" required>
+    <textarea name="content" placeholder="What's on your mind?" required></textarea>
+    <button type="submit" class="small">Post</button>
   </form>
   {% for post in posts %}
-    <div class="post">
-      <img src="{{ post.picture }}" alt="Post image">
-      <p>{{ post.content }}</p>
-      <p>Posted by {{ post.user_id }} at {{ post.created_at }}</p>
-      <form method="POST" action="{{ url_for('comment') }}">
-        {{ form.csrf_token }}
-        <input type="hidden" name="post_id" value="{{ post.id }}">
-        <input type="text" name="content" placeholder="Add a comment...">
-           {{ form.csrf_token }}
-        <button type="submit">wow, you must be so right !</button>
-      </form>
-    {% for comment in comments %}
-          {% if comment.post_id == post.id %}
-            <div class="comment">
-              <p>{{ comment.content }}</p>
-              <p>Commented by {{ comment.user_id }} at {{ comment.created_at }}</p>
-              <p>Upvotes: {{ comment.upvotes }}</p>
-              <form method="POST" action="{{ url_for('upvote_comment') }}">
-                {{ form.csrf_token }}
-                <input type="hidden" name="comment_id" value="{{ comment.id }}">
-                <button type="submit">Upvote</button>
-              </form>
-              <form method="POST" action="{{ url_for('downvote_comment') }}">
-                {{ form.csrf_token }}
-                <input type="hidden" name="comment_id" value="{{ comment.id }}">
-                <button type="submit">Downvote</button>
-              </form>
-            </div>
-    {% endif %}
-{% endfor %}
+    <div class="post-container">
+      <div class="post">
+        <img src="{{ post.picture }}" alt="Post image">
+        <p>{{ post.content }}</p>
+        <p>Posted by {{ post.user_id }} at {{ post.created_at }}</p>
+      </div>
+
+      <div class="comments-container" style="max-height: 450px; overflow-y: auto;">
+        <form method="POST" action="{{ url_for('comment') }}">
+          {{ form.csrf_token }}
+          <input type="hidden" name="post_id" value="{{ post.id }}">
+          <input type="text" name="content" placeholder="Add a comment..." required>
+          <button type="submit">Wow, you must be so right!</button>
+        </form>
+        {% for comment in post.comments %}
+          <div class="comment">
+            <p>{{ comment.content }}</p>
+            <p>Commented by {{ comment.user_id }} at {{ comment.timestamp }}</p>
+            <p>Likes: {{ comment.upvotes }}</p>
+            <form method="POST" action="{{ url_for('upvote_comment') }}">
+              {{ form.csrf_token }}
+              <input type="hidden" name="comment_id" value="{{ comment.id }}">
+              <button class="secondary small">Like</button>
+            </form>
+            <form method="POST" action="{{ url_for('downvote_comment') }}">
+              {{ form.csrf_token }}
+              <input type="hidden" name="comment_id" value="{{ comment.id }}">
+              <button class="outline secondary small">Actually.. Dont like</button>
+            </form>
+          </div>
+        {% endfor %}
+      </div>
     </div>
   {% endfor %}
+</div>
 {% endblock %}

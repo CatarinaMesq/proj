@@ -1,9 +1,12 @@
-
-{% extends 'index.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
-  <h2>Register</h2>
-  
+
+
+
+<!-- Main -->
+ <main class="container" id="main">
+     <h2>Register</h2>
   <form action="{{ url_for('register') }}" method="post">
     <div class="form-group">
         <label for="username">Username</label>
@@ -29,4 +32,5 @@
 
 
   <div class="alert alert-danger">{{error if error is not none}}</div>
+     </main><!-- ./ Main -->
 {% endblock %}
