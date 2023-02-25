@@ -5,7 +5,7 @@
 <!-- Main -->
 
  <main class="container" id="main">
-     <form action="{{ url_for('search') }}" method="get">
+     <form action="{{ url_for('route_search') }}" method="get">
   <input type="search" id="search" name="q" placeholder="What are you looking for?">
 </form>
      <article id="article">
@@ -21,8 +21,6 @@
       </article> </form> </main><!-- ./ Main -->
 {% endblock %}
 
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </body>
 </html>
 

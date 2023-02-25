@@ -1,64 +1,59 @@
-{% extends 'base.html' %}
-
-{% block content %}
-  <style>
-    .post img {
-  display: block;
-  margin: 0 auto;
-}
-  .comments-container {
-  border: 1px solid rgba(128, 128, 128, 0.5);
-  padding: 10px;
-  margin-top: 10px;}
-   </style>
-
-
-
+{% extends 'base.html' %} {% block content %}
+<style>
+   .post img {
+   display: block;
+   margin: 0 auto;
+   }
+   .comments-container {
+   border: 1px solid rgba(128, 128, 128, 0.5);
+   padding: 10px;
+   margin-top: 10px;
+   }
+</style>
 <div class="container mt-5">
-  <h2 class="text-center">Feed</h2>
-  <p class="text-center">View and post updates on the Sarcastic Network</p>
-  <!-- Post Form -->
-  <main class="container" id="main">
-  <form method="POST" action="{{ url_for('post') }}" enctype="multipart/form-data">
-    {{ form.csrf_token }}
-    <input type="file" name="image" required>
-    <textarea name="content" placeholder="What's on your mind?" required></textarea>
-    <button type="submit" class="small">Post</button>
-  </form>
-  {% for post in posts %}
-    <div class="post-container">
+   <h2 class="text-center">Feed</h2>
+   <p class="text-center">View and post updates on the Sarcastic Network</p>
+   <!-- Post Form -->
+   <main class="container" id="main">
+   <form method="POST" action="{{ url_for('route_post') }}" enctype="multipart/form-data">
+      {{ form.csrf_token }}
+      <input type="file" name="image" required>
+      <textarea name="content" placeholder="What's on your mind?" required></textarea>
+      <button type="submit" class="small">Post</button>
+   </form>
+   {% for post in posts %}
+   <div class="post-container">
       <div class="post">
-        <img src="{{ post.picture }}" alt="Post image">
-        <p>{{ post.content }}</p>
-        <p>Posted by {{ post.user_id }} at {{ post.created_at }}</p>
+         <img src="{{ post.picture }}" alt="Post image">
+         <p>{{ post.content }}</p>
+         <p>Posted by {{ post.user_id }} at {{ post.created_at }}</p>
       </div>
-
       <div class="comments-container" style="max-height: 450px; overflow-y: auto;">
-        <form method="POST" action="{{ url_for('comment') }}">
-          {{ form.csrf_token }}
-          <input type="hidden" name="post_id" value="{{ post.id }}">
-          <input type="text" name="content" placeholder="Add a comment..." required>
-          <button type="submit">Wow, you must be so right!</button>
-        </form>
-        {% for comment in post.comments %}
-          <div class="comment">
+         <form method="POST" action="{{ url_for('route_comment') }}">
+            {{ form.csrf_token }}
+            <input type="hidden" name="post_id" value="{{ post.id }}">
+            <input type="text" name="content" placeholder="Add a comment..." required>
+            <button type="submit">Wow, you must be so right!</button>
+         </form>
+         {% for comment in post.comments %}
+         <div class="comment">
             <p>{{ comment.content }}</p>
             <p>Commented by {{ comment.user_id }} at {{ comment.timestamp }}</p>
             <p>Likes: {{ comment.upvotes }}</p>
-            <form method="POST" action="{{ url_for('upvote_comment') }}">
-              {{ form.csrf_token }}
-              <input type="hidden" name="comment_id" value="{{ comment.id }}">
-              <button class="secondary small">Like</button>
+            <form method="POST" action="{{ url_for('route_upvote_comment') }}">
+               {{ form.csrf_token }}
+               <input type="hidden" name="comment_id" value="{{ comment.id }}">
+               <button class="secondary small">Like</button>
             </form>
-            <form method="POST" action="{{ url_for('downvote_comment') }}">
-              {{ form.csrf_token }}
-              <input type="hidden" name="comment_id" value="{{ comment.id }}">
-              <button class="outline secondary small">Actually.. Dont like</button>
+            <form method="POST" action="{{ url_for('route_downvote_comment') }}">
+               {{ form.csrf_token }}
+               <input type="hidden" name="comment_id" value="{{ comment.id }}">
+               <button class="outline secondary small">Actually.. Dont like</button>
             </form>
-          </div>
-        {% endfor %}
+         </div>
+         {% endfor %}
       </div>
-    </div>
-  {% endfor %}
-</div>
+   </div>
+   {% endfor %}
+ </main> </div>
 {% endblock %}
