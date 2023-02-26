@@ -50,7 +50,7 @@ def register():
         conn.commit()
 
         # redirect to the login page
-        return redirect(url_for('login'))
+        return redirect(url_for('route_login'))
 
     # if the request method is not POST, render the register template
     return render_template('register.html')
