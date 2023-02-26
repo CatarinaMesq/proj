@@ -1,3 +1,20 @@
+
+
+# Software Development Project (SDP)
+
+ ## Documentação Técnica da aplicação
+        ### Sarcastic Network
+
+
+- Professores: J.T. Aparício & C.J. Costa
+Trabalho realizado por: 
+
+- André Montoia
+- Catarina Mesquita
+- Écio Cesário
+- Margarida Perdigão
+
+
 # Introdução
  
 Foi solicitado a criação de uma aplicação de rede social no modelo MVP (Produto Mínimo Viável) com os seguintes requisitos técnicos:
