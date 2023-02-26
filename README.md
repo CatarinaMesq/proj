@@ -2,7 +2,7 @@
 
 # Software Development Project (SDP)
 
- ## Documentação Técnica da aplicação
+
   ### Sarcastic Network
 
 
