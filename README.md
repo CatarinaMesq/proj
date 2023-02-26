@@ -70,6 +70,17 @@ project/
 **secure_filename**: Uma função do Werkzeug que retorna uma versão segura de um nome de arquivo para evitar ataques de injeção de código.
 
 
+# app.py main app to execute 
+
+A função render_template é usada para renderizar arquivos HTML. As funções que iniciam com route_ correspondem às rotas do aplicativo. Quando um usuário acessa uma rota específica, a função correspondente é executada para retornar uma resposta.
+
+O arquivo functions.py contém as funções definidas para manipular os dados enviados pelos usuários e para manipular o banco de dados subjacente. As funções importadas a partir do functions.py são usadas pelas rotas do Flask.
+
+A rota raiz / retorna o arquivo index.html, enquanto outras rotas, como /register e /login, executam funções específicas de registro e login, respectivamente. A rota /feed mostra os posts mais recentes no feed e a rota /profile exibe o perfil de um usuário específico.
+
+As rotas /upvote_comment e /downvote_comment são responsáveis por aumentar ou diminuir a contagem de votos em um comentário específico, respectivamente.
+
+Finalmente, o bloco if __name__ == '__main__' é executado somente se o script for executado diretamente, e não se ele for importado em outro arquivo. Neste caso, a aplicação Flask é executada em modo de depuração (debug=True), o que permite depurar a aplicação mais facilmente.
 
 # Funções - functions.py
 
@@ -219,3 +230,7 @@ A consulta SQL é executada usando o método execute do objeto de conexão do ba
 Prepara uma lista de dicionários contendo informações sobre as postagens encontradas. A imagem da postagem é convertida em uma string codificada em base64 para exibição na página.
 
 Renderiza a página de resultados de pesquisa com a consulta e a lista de postagens usando a função render_template do Flask.
+
+
+
+
