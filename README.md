@@ -189,4 +189,33 @@ Em seguida, a função recupera todas as postagens e comentários do base de dad
 
 Por fim, a função redireciona o utilizador para a página do feed.
 
+## def upvote_comment()
 
+Verifica se o utilizador tem sessão iniciada, procurando a chave 'logged_in' no dicionário de sessão. Se o utilizador não tiver sessão iniciada, a função redireciona-o para a página de login, devolvendo uma resposta de redirecionamento utilizando a função redirect do framework Flask.
+Cria uma nova instância da classe LoginForm.
+Obtém o valor do comment_id do formulário de pedido utilizando o método request.form.get.
+Atualiza o contador de upvotes do comentário na base de dados executando uma consulta SQL utilizando o método execute do objeto de conexão à base de dados. A consulta atualiza o campo upvotes na tabela de comentários onde o campo id corresponde ao valor do comment_id.
+Confirma as alterações na base de dados utilizando o método commit do objeto de conexão à base de dados.
+Recupera todos os posts da base de dados e armazena-os na variável posts, executando uma consulta SQL utilizando o método execute do objeto de conexão à base de dados. A consulta recupera todos os campos da tabela de posts e ordena-os pelo campo created_at em ordem descendente.
+Recupera todos os comentários da base de dados e armazena-os na variável comments, executando uma consulta SQL utilizando o método execute do objeto de conexão à base de dados. A consulta recupera todos os campos da tabela de comentários e ordena-os pelo campo timestamp em ordem descendente.
+Redireciona o utilizador para a página de feed devolvendo uma resposta de redirecionamento utilizando a função redirect do framework Flask e a função url_for para obter o URL da função de visualização route_feed.
+
+## def downvote_comment()
+
+Verifica se o usuário está logado, verificando se a chave logged_in está presente no dicionário de sessão. Se o usuário não estiver logado, a função redireciona para a página de login, retornando uma resposta de redirecionamento usando a função redirect do framework Flask.
+Obtém o valor comment_id dos dados do formulário de solicitação usando o método request.form.get.
+Atualiza o contador de upvotes do comentário no banco de dados executando uma consulta SQL usando o método execute do objeto de conexão do banco de dados. A consulta decrementa o campo upvotes na tabela comments onde o campo id corresponde ao valor comment_id.
+Confirma as alterações no banco de dados usando o método commit do objeto de conexão do banco de dados.
+Redireciona o usuário para a página de feed retornando uma resposta de redirecionamento usando a função redirect do framework Flask e a função url_for para obter a URL da função de visualização route_feed.
+
+
+## def search():
+
+Obtém a consulta de pesquisa do usuário a partir da string de consulta de URL usando o método request.args.get('q').
+Se não houver consulta de pesquisa, redireciona o usuário para a página de erro usando a função redirect do Flask.
+Usa o operador LIKE com caracteres curinga para pesquisar postagens que contenham a string de consulta. 
+
+A consulta SQL é executada usando o método execute do objeto de conexão do banco de dados.
+Prepara uma lista de dicionários contendo informações sobre as postagens encontradas. A imagem da postagem é convertida em uma string codificada em base64 para exibição na página.
+
+Renderiza a página de resultados de pesquisa com a consulta e a lista de postagens usando a função render_template do Flask.
