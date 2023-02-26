@@ -80,31 +80,31 @@ project/
 # As bibliotecas importadas são:
 
 
-**base64**: Uma biblioteca que fornece funções para codificar e decodificar dados em formato base64.
+- **base64**: Uma biblioteca que fornece funções para codificar e decodificar dados em formato base64.
 
-**os**: Uma biblioteca que fornece funções para interagir com o sistema operacional, como criar arquivos e diretórios.
+- **os**: Uma biblioteca que fornece funções para interagir com o sistema operacional, como criar arquivos e diretórios.
 
-**sqlite3**: Uma biblioteca que fornece funções para trabalhar com bancos de dados SQLite.
+- **sqlite3**: Uma biblioteca que fornece funções para trabalhar com bancos de dados SQLite.
 
-**datetime**: Uma biblioteca que fornece funções para manipular datas e horas.
+- **datetime**: Uma biblioteca que fornece funções para manipular datas e horas.
 
-**Flask**: Um framework web em Python para construir aplicativos web.
+- **Flask**: Um framework web em Python para construir aplicativos web.
 
-**render_template**: Uma função do Flask para renderizar um modelo HTML.
+- **render_template**: Uma função do Flask para renderizar um modelo HTML.
 
-**request**: Um objeto global do Flask que contém os dados enviados por um cliente HTTP.
+- **request**: Um objeto global do Flask que contém os dados enviados por um cliente HTTP.
 
-**redirect**: Uma função do Flask para redirecionar um cliente HTTP para outra página.
+- **redirect**: Uma função do Flask para redirecionar um cliente HTTP para outra página.
 
-**url_for**: Uma função do Flask para gerar URLs para as páginas de um aplicativo web.
+- **url_for**: Uma função do Flask para gerar URLs para as páginas de um aplicativo web.
 
-**session**: Um objeto global do Flask que permite armazenar informações do lado do servidor para uso posterior.
+- **session**: Um objeto global do Flask que permite armazenar informações do lado do servidor para uso posterior.
 
-**flash**: Uma função do Flask para mostrar mensagens de erro ou aviso na página.
+- **flash**: Uma função do Flask para mostrar mensagens de erro ou aviso na página.
 
-**generate_password_hash e check_password_hash**: Funções do Werkzeug que são usadas para criptografar e verificar senhas de usuário.
+- **generate_password_hash e check_password_hash**: Funções do Werkzeug que são usadas para criptografar e verificar senhas de usuário.
 
-**secure_filename**: Uma função do Werkzeug que retorna uma versão segura de um nome de arquivo para evitar ataques de injeção de código.
+- **secure_filename**: Uma função do Werkzeug que retorna uma versão segura de um nome de arquivo para evitar ataques de injeção de código.
 
 
 # app.py main app to execute 
