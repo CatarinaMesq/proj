@@ -1,4 +1,4 @@
-![alt text](https://github.com/CatarinaMesq/proj/blob/[branch]/image.jpg?raw=true)
+![alt text](https://github.com/CatarinaMesq/proj/blob/Imagem1.png?raw=true)
 
 # Software Development Project (SDP)
 
