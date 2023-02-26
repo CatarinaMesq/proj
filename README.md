@@ -3,11 +3,14 @@
 # Software Development Project (SDP)
 
  ## Documentação Técnica da aplicação
-        ### Sarcastic Network
+  ### Sarcastic Network
 
 
-- Professores: J.T. Aparício & C.J. Costa
-Trabalho realizado por: 
+### Professores: 
+- J.T. Aparício 
+- C.J. Costa
+
+### Trabalho realizado por: 
 
 - André Montoia
 - Catarina Mesquita
