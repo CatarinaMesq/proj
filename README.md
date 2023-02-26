@@ -1,4 +1,4 @@
-![alt text](https://github.com/CatarinaMesq/proj/blob/Imagem1.png?raw=true)
+![Imagem1](https://user-images.githubusercontent.com/51320524/221420329-ca750e79-1acb-4f76-a418-c5264fba08bd.png)
 
 # Software Development Project (SDP)
 
