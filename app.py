@@ -2,7 +2,8 @@
 from functions import *
 
 
-
+# routes for the app to use the functions in functions.py to render the html pages and handle the requests from the
+# user to the server and vice versa
 @app.route('/')
 def index():
     return render_template('index.html')

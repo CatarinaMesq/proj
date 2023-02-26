@@ -9,12 +9,13 @@ from flask_wtf.csrf import CSRFProtect
 
 from forms import LoginForm
 
-
+# Configs
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = '../proj/templates/assets'
 app.secret_key = "my_secret_key"
 csrf = CSRFProtect(app)
 
+# Database connection
 conn = sqlite3.connect('sarcastic_network.db', check_same_thread=False)
 c = conn.cursor()
 
