@@ -423,8 +423,7 @@ from flask import abort
 
 def error():
     # Raise a 404 error page
-    abort(404)
-
+    return render_template('error.html'), 404
 
 def search():
     # Get the user's search query from the URL query string
@@ -432,7 +431,7 @@ def search():
 
     # If there is no search query, redirect to the error page
     if not query:
-        return redirect(url_for('error'))
+        return redirect(url_for('route_error'))
 
     # Use the LIKE operator with wildcards to search for posts that contain the query string
     sql = "SELECT * FROM posts WHERE content LIKE ?"
