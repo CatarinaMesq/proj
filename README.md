@@ -76,6 +76,10 @@ project/
 
 │   └── css/
 
+# Diagrama Base de Dados 
+<img width="644" alt="Captura de ecrã 2023-02-26, às 16 08 19" src="https://user-images.githubusercontent.com/51320524/221422119-3307ee11-af85-4423-b8ee-b0bae753bce5.png">
+
+
 
 # As bibliotecas importadas são:
 
@@ -105,6 +109,7 @@ project/
 - **generate_password_hash e check_password_hash**: Funções do Werkzeug que são usadas para criptografar e verificar senhas de usuário.
 
 - **secure_filename**: Uma função do Werkzeug que retorna uma versão segura de um nome de arquivo para evitar ataques de injeção de código.
+
 
 
 # app.py main app to execute 
