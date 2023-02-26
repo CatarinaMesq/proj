@@ -1,14 +1,19 @@
 import base64
 import os
 import sqlite3
-from datetime import datetime
 
-from flask import render_template, request, redirect, url_for, session, flash
+from flask import render_template, request, redirect, url_for, session, flash, Flask
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
+from flask_wtf.csrf import CSRFProtect
 
 from forms import LoginForm
-from app import app
+
+
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = '../proj/templates/assets'
+app.secret_key = "my_secret_key"
+csrf = CSRFProtect(app)
 
 conn = sqlite3.connect('sarcastic_network.db', check_same_thread=False)
 c = conn.cursor()

@@ -1,11 +1,7 @@
-from flask_wtf.csrf import CSRFProtect
-from flask import Flask
+
 from functions import *
 
-app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = '../proj/templates/assets'
-app.secret_key = "my_secret_key"
-csrf = CSRFProtect(app)
+
 
 @app.route('/')
 def index():
