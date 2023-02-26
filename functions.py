@@ -8,6 +8,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 
 from forms import LoginForm
+from app import app
 
 conn = sqlite3.connect('sarcastic_network.db', check_same_thread=False)
 c = conn.cursor()
