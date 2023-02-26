@@ -40,7 +40,7 @@ project/
 │   └── css/
 
 
-## As bibliotecas importadas são:
+# As bibliotecas importadas são:
 
 
 **base64**: Uma biblioteca que fornece funções para codificar e decodificar dados em formato base64.
@@ -69,9 +69,11 @@ project/
 
 **secure_filename**: Uma função do Werkzeug que retorna uma versão segura de um nome de arquivo para evitar ataques de injeção de código.
 
-## Funções - functions.py
 
-def register()
+
+# Funções - functions.py
+
+## def register()
 
 Esta é uma função que lida com o registo de novos utilizadores na aplicação. 
 
@@ -89,7 +91,7 @@ Caso contrário, a função insere as informações do novo utilizador no banco 
 
 Por fim, a função redireciona o usuário para a página de login usando a função redirect() do Flask. Se o método da solicitação não for POST, a função renderiza novamente a página de registro.
 
-def login()
+## def login()
 
 Esta função é responsável pelo processo de login do utilizador. 
 
@@ -107,7 +109,7 @@ Se não for encontrado nenhum utilizador com o nome de utilizador fornecido, a f
 
 Se o método de pedido não for POST, a função renderiza o modelo de login com o formulário e a mensagem de erro (que será None).
 
-def logout()
+## def logout()
 
 Esta função implementa o logout de um utilizador autenticado na aplicação web.
 
@@ -121,7 +123,7 @@ Após remover as variáveis de sessão, a função redireciona o utilizador para
 
 A função url_for() gera a URL da rota correspondente à função index().
 
-def profile()
+## def profile()
 
 Esta função chamada profile é responsável por renderizar a página de perfil de um usuário específico. A página exibe informações sobre o usuário, seus posts e comentários.
 
@@ -135,4 +137,7 @@ Em seguida, a função itera através dos posts e cria um dicionário contendo i
 
 Finalmente, a função renderiza o modelo user_profile.html e passa as informações relevantes para serem exibidas na página, incluindo informações do usuário, lista de posts e lista de comentários, além do formulário LoginForm.
 
-def 
+## def feed()
+
+
+
