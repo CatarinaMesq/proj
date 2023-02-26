@@ -40,6 +40,22 @@ project/
 │   └── css/
 
 
+# Introdução
+ 
+Foi solicitado a criação de uma aplicação de rede social no modelo MVP (Produto Mínimo Viável) com os seguintes requisitos técnicos:
+•       Perfis personalizáveis: os usuários podem criar e personalizar seus perfis com imagens de cabeçalho personalizadas, cores de fundo e estilos de fonte.
+•       Feed do usuário: um feed em tempo real de todas as postagens.
+•       Pesquisa de usuário: um mecanismo de pesquisa que permite aos usuários encontrar outros usuários e seus perfis.
+•       Sistema de comentários: um sistema de comentários que permite aos usuários participar com notificações em tempo real.
+•       Reações de emoji e a capacidade de votar em comentários positivos ou negativos.
+•       Implantação: O sistema deve ser implantado para que os usuários possam utilizá-lo.
+•       Segurança: A plataforma deve ser segura, protegendo os dados do usuário com criptografia e garantindo a privacidade.
+•       Sua página principal deve ter um slogan e o nome da rede social.
+·   	Desenvolver um código robusto e compreensível que reduzirá os custos e atrasos de produção e manutenção. No entanto, o  banco de dados deve ser dimensionado para muitos usuários.
+·   	Cada página deve ter pelo menos um teste.
+ 
+Com isso, foi desenvolvido um aplicativo Python Flask para um rede social denominada Sarcastic Network.
+
 # As bibliotecas importadas são:
 
 
